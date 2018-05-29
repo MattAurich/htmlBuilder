@@ -2,6 +2,9 @@ Built using hapi.js, it caches mustache templates into a redis server from s3, a
 
 # To start
 replace app/config.example.js values and rename to app/config.js
+
 npm install
+
 start a redis server/instance (https://redis.io/topics/quickstart)
+
 node app/server.js
