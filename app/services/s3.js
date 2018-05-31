@@ -67,7 +67,7 @@ const s3Client = {
       get: async (prefix) => {
         const params = {
           Bucket: config.aws.buckets.templates, 
-          Key: `${prefix}/main.mustache`,
+          Key: `${prefix}/main.hbs`,
         };
 
         return new Promise((resolve, reject) => {

@@ -24,7 +24,7 @@ const init = async () => {
         plugin: require('hapi-pino'),
         options: {
             prettyPrint: true,
-            logEvents: ['response']
+            logEvents: ['request-error']
         }
       },
       require('./plugins/build/routes'),
