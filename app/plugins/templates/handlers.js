@@ -5,21 +5,21 @@ const asyncForEach = async (array, callback) => {
 }
 
 const cacheAll = async (request) => {
-    const response = await request.server.methods.s3.listAllObjects(false)
+    const response = await request.server.methods.s3.listAllObjects()
     .then(async function(response) {
-        const templateKeys = [];
-        await asyncForEach(response, async function(object) {
-            let templateKey = await cacheS3Templates(request, object.Key);
-            templateKeys.push(templateKey);
+        const templatePrefixes = [];
+        await asyncForEach(response, async function(prefix) {
+            let templateKey = await cacheS3Templates(request, prefix);
+            templatePrefixes.push(templateKey);
         });
-        return `[ ${templateKeys.join(', ')} ]`;
+        return `[ ${templatePrefixes.join(', ')} ]`;
     })
 
     return response;
 }
 
-const cacheS3Templates = (request, objectKey) => {
-    return request.server.methods.s3.get(objectKey)
+const cacheS3Templates = (request, templatePrefix) => {
+    return request.server.methods.s3.get(templatePrefix)
     .then(async response => {
         const template = await request.server.methods.redisDB.set(response.key, response.body);
         return `${template.key} now cached`;
@@ -34,9 +34,9 @@ const handler = {
         var response;
 
         if (request.params.key) {
-            var objectKey = `templates/${request.params.key}`;
+            var templatePrefix = request.params.key;
 
-            response = await cacheS3Templates(request, objectKey);
+            response = await cacheS3Templates(request, templatePrefix);
         } else {
             response = await cacheAll(request);
         }

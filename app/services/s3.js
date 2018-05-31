@@ -9,31 +9,35 @@ AWS.config.region = config.aws.region;
 const s3 = new AWS.S3();
 const s3Client = { 
   init: async (server) => {
-    let myBucket = config.aws.bucket;
-    
     const s3Calls = {
       put: async (destDir, body) => {
         const myKey = `${destDir}/index.html`;
-        const params = {Bucket: myBucket, Key: myKey, Body: body };
+        const params = {
+          Bucket: config.aws.buckets.destination,
+          Key: myKey,
+          Body: body,
+          CacheControl: 'no-cache',
+          ContentType: 'text/html',
+          Expires: 0,
+        };
 
         return new Promise((resolve, reject) => {
           s3.putObject(params, async (error, data) => {
             if (error) {
               reject(error);
             } else {
-              resolve(`Successfully uploaded data to ${myBucket}/${myKey}`);
+              resolve(`Successfully uploaded data to ${config.aws.buckets.destination}/${myKey}`);
             }
           });
         });
         
       },
-      listAllObjects: async (token) => {
+      listAllObjects: async (token = false) => {
         var allObjects = [];
         
-        function listAllKeys(token, cb) {
+        function listAllPrefixes(token, cb) {
           const params = {
-            Bucket: config.aws.bucket, 
-            Prefix: 'templates/',
+            Bucket: config.aws.buckets.templates,
             Delimiter: '/',
           };
           if (token) {
@@ -41,14 +45,12 @@ const s3Client = {
           }
 
           return s3.listObjectsV2(params, function(err, data) {
-            data.Contents.forEach(function(object) {
-              if (object.Size > 0) {
-                allObjects.push(object);
-              }
+            data.CommonPrefixes.forEach(function(object) {
+              allObjects.push(object.Prefix.slice(0, -1));
             });
 
             if (data.IsTruncated) {
-              listAllKeys(data.NextContinuationToken);
+              listAllPrefixes(data.NextContinuationToken);
             }
             else {
               cb();
@@ -57,15 +59,15 @@ const s3Client = {
         }
 
         return new Promise(async resolve => {
-          listAllKeys(token, () => {
+          listAllPrefixes(token, () => {
             resolve(allObjects);
           });
         });
       },
-      get: async (key) => {
+      get: async (prefix) => {
         const params = {
-          Bucket: config.aws.bucket, 
-          Key: key,
+          Bucket: config.aws.buckets.templates, 
+          Key: `${prefix}/main.mustache`,
         };
 
         return new Promise((resolve, reject) => {
@@ -74,7 +76,7 @@ const s3Client = {
               reject(err);
             } else {
               resolve({
-                key: key,
+                key: prefix,
                 body: data.Body.toString('utf-8').toString(),
               });
             }

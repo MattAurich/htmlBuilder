@@ -11,7 +11,10 @@ const config = {
     accessKeyId: <INSERT AWS ACCESS KEY ID STRING HERE>,
     secretAccessKey: <INSERT AWS SECRET ACCESS KEY STRING HERE>,
     region: <INSERT AWS REGION STRING HERE>,
-    bucket: <INSERT AWS BUCKET STRING HERE>,
+    buckets: {
+      templates: <INSERT AWS BUCKET STRING HERE>,
+      destination: <INSERT AWS BUCKET STRING HERE>,
+    },
   },
  };
  

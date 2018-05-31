@@ -11,7 +11,7 @@ env.addFilter('markdown', function(val, cb) {
 
 const handler = {
   build: async (request, h) => {
-    const objKey = `templates/${request.params.key}`;
+    const objKey = request.params.key;
     var response = await request.server.methods.redisDB.get(objKey)
     .catch(function(error) {
       return request.server.methods.s3.get(objKey)
