@@ -8,14 +8,22 @@ const config = {
     port: <INSERT REDISDB PORT NUMBER>,
   },
   aws: {
-    accessKeyId: <INSERT AWS ACCESS KEY ID STRING HERE>,
-    secretAccessKey: <INSERT AWS SECRET ACCESS KEY STRING HERE>,
-    region: <INSERT AWS REGION STRING HERE>,
+    accessKeyId: <INSERT AWS ACCESS KEY ID STRING>,
+    secretAccessKey: <INSERT AWS SECRET ACCESS KEY STRING>,
+    region: <INSERT AWS REGION STRING>,
     buckets: {
-      templates: <INSERT AWS BUCKET STRING HERE>,
-      destination: <INSERT AWS BUCKET STRING HERE>,
+      templates: <INSERT AWS BUCKET STRING>,
+      destination: <INSERT AWS BUCKET STRING>,
     },
   },
+  users: {
+    <USERNAME> : {
+      id: <ID STRING>,
+      username: <USERNAME>,
+      password: <PASSWORD>,
+    },
+    <ETC..>,
+  }
  };
  
  module.exports = config;
