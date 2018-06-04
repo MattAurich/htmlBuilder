@@ -9,19 +9,23 @@ Built using hapi.js, it caches mustache templates into a redis server from s3, a
 
 4. node app/server.js
 
-# S3 template bucket setup
+# Routes
+* Templates
+    * used to update the templates found redis cache
 
-  * folder structure like so: TBD
+# S3 template bucket setup
+* folder structure like so: TBD
 
 # S3 destination bucket setup
-  * set up for static hosting like so: TBD
+* set up for static hosting like so: TBD
 
 # For input validation
-  * handled by TBD
+* handled by TBD
 
 # Error handling
-  * handled by TBD
+* handled by TBD
 
 # Logging
-  * handled by hapi-pino
-  * log files put to TBD
+* handled by hapi-pino
+
+* log files put to TBD

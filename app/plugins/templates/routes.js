@@ -6,7 +6,7 @@ const baseRoutes = {
   version: '1.0.0',
   register: async function (server, options) {
     server.route([{
-      method: ['GET'],
+      method: ['PUT'],
       path: '/templates/{key?}',
       handler: handlers.getTemplates,
     }
